@@ -6,53 +6,117 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
     body{max-width:800px;margin:40px auto;padding:0 20px;background:#f9f9f9}
-    .box{background:white;padding:24px;border-radius:12px;box-shadow:0 2px 10px #00000010}
+    .box{background:white;padding:24px;border-radius:12px;box-shadow:0 2px 10px #00000010;margin-bottom:16px}
     textarea{width:100%;height:180px;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px}
-    button{background:#007bff;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer}
-    .result{margin-top:20px;padding:16px;background:#f1f1f1;border-radius:8px;min-height:100px}
+    button{background:#007bff;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:16px}
+    button:hover{background:#0056b3}
+    .result{margin-top:20px;padding:16px;background:#f1f1f1;border-radius:8px;min-height:100px;white-space:pre-wrap}
     .tg{margin-top:20px;text-align:center;color:#333}
     .tg a{color:#007bff;font-weight:bold}
     .limit{color:#666;font-size:14px;margin-bottom:10px}
+    .pay-section{text-align:center;margin:20px 0}
+    .pay-section h3{margin-bottom:12px;color:#333}
+    .pay-btn{background:#222;padding:14px 40px;border-radius:30px;display:inline-block;margin:8px}
+    .pay-btn:hover{background:#333}
+    .api-section{margin-top:16px;padding:16px;background:#e8f5e9;border-radius:8px;text-align:center}
+    .api-section input{width:280px;padding:10px;border:1px solid #ccc;border-radius:6px;margin:8px}
+    .api-section button{background:#28a745}
+    .api-section button:hover{background:#1e7e34}
+    .nav{display:flex;gap:12px;justify-content:center;margin-bottom:20px}
+    .nav button{background:#6c757d;padding:8px 20px}
+    .nav button.active{background:#007bff}
+    .hidden{display:none}
+    .badge{background:#ffc107;color:#333;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:bold}
   </style>
 </head>
 <body>
-  <div class="box">
-    <h2>Free AI Paraphraser | Rewrite Text</h2>
-    <p class="limit">Free daily uses, no login needed</p>
-    <textarea id="input" placeholder="Paste your text here..."></textarea>
-    <button onclick="rewrite()">Paraphrase</button>
-    <div class="result" id="result"></div>
+  <div class="nav">
+    <button onclick="showTab('tool')" id="tabTool" class="active">Paraphrase Tool</button>
+    <button onclick="showTab('pricing')" id="tabPricing">Pricing & Unlock</button>
   </div>
-  <div class="tg">
-    Unlimited use & API Key → Telegram: <a href="https://t.me/Alexis" target="_blank">@Alexis</a>
+  <div id="tabToolContent">
+    <div class="box">
+      <h2>Free AI Paraphraser | Rewrite Text</h2>
+      <p class="limit">Free: <span id="usedCount">0</span>/3 daily uses | <span class="badge">Unlimited: $5/mo</span></p>
+      <textarea id="input" placeholder="Paste your text here..."></textarea>
+      <button onclick="rewrite()">Paraphrase</button>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="tg">Questions? Telegram: <a href="https://t.me/Alexis" target="_blank">@Alexis</a></div>
   </div>
-
+  <div id="tabPricingContent" class="hidden">
+    <div class="box">
+      <h2>Unlock Unlimited Access</h2>
+      <p style="margin:12px 0;color:#555">Get unlimited paraphrasing + your own API key for just <strong>$5/month</strong>.</p>
+      <div class="pay-section">
+        <h3>What you get:</h3>
+        <p style="margin:6px 0">Unlimited use - no daily limit</p>
+        <p style="margin:6px 0">Priority processing speed</p>
+        <p style="margin:6px 0">Access to all future features</p>
+        <h3 style="margin-top:20px">Pay with PayPal</h3>
+        <p style="color:#666;font-size:14px;margin:8px 0">Send $5 to the PayPal account below, then enter your email to receive your API key.</p>
+        <div style="background:#f8f9fa;padding:16px;border-radius:8px;margin:12px 0">
+          <p style="font-size:18px;font-weight:bold;color:#333">1640004571@qq.com</p>
+          <p style="color:#666;font-size:13px">PayPal</p>
+        </div>
+        <a class="pay-btn" href="https://paypal.me/bw41640004571" target="_blank" style="color:white;text-decoration:none">Pay Now with PayPal</a>
+        <p style="color:#888;font-size:13px;margin-top:6px">Or send to PayPal.me/bw41640004571</p>
+      </div>
+      <div class="api-section">
+        <h3>Already paid? Get your API Key</h3>
+        <p style="color:#555;font-size:14px">Enter the email you paid with and we will verify and send your key.</p>
+        <input type="email" id="paidEmail" placeholder="Enter your email">
+        <button onclick="requestKey()">Get My API Key</button>
+        <p id="keyResult" style="margin-top:8px;font-size:14px"></p>
+      </div>
+    </div>
+    <div class="tg">DM on Telegram: <a href="https://t.me/Alexis" target="_blank">@Alexis</a></div>
+  </div>
   <script>
-    let count = 0;
-    async function rewrite() {
-      if(count >= 3) {
-        document.getElementById("result").innerText = "Daily limit reached. DM Telegram for unlimited.";
-        return;
+    let count = parseInt(localStorage.getItem("paraCount") || "0");
+    let resetDate = localStorage.getItem("paraDate") || "";
+    const today = new Date().toDateString();
+    if(resetDate !== today) {
+      count = 0;
+      localStorage.setItem("paraCount", "0");
+      localStorage.setItem("paraDate", today);
+    }
+    document.getElementById("usedCount").innerText = count;
+    function showTab(tab) {
+      document.getElementById("tabToolContent").classList.add("hidden");
+      document.getElementById("tabPricingContent").classList.add("hidden");
+      document.getElementById("tabTool").classList.remove("active");
+      document.getElementById("tabPricing").classList.remove("active");
+      if(tab === "tool") {
+        document.getElementById("tabToolContent").classList.remove("hidden");
+        document.getElementById("tabTool").classList.add("active");
+      } else {
+        document.getElementById("tabPricingContent").classList.remove("hidden");
+        document.getElementById("tabPricing").classList.add("active");
       }
+    }
+    async function rewrite() {
       let text = document.getElementById("input").value;
       if(!text) return alert("Enter text");
+      const unlimited = localStorage.getItem("unlimited") === "true";
+      if(!unlimited && count >= 3) {
+        document.getElementById("result").innerHTML = "Daily limit reached. Click Pricing tab to unlock unlimited.";
+        return;
+      }
       document.getElementById("result").innerText = "Processing...";
-
       const res = await fetch("https://api.deepseek.com/v1/chat/completions", {
         method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization":"Bearer sk-a25622a11cf3443bb77e0092884630bc"
-        },
-        body:JSON.stringify({
-          model: "deepseek-chat",
-          messages: [{role:"user",content:"Paraphrase this text in English: "+text}]
-        })
+        headers:{"Content-Type":"application/json","Authorization":"Bearer sk-a25622a11cf3443bb77e0092884630bc"},
+        body:JSON.stringify({model:"deepseek-chat",messages:[{role:"user",content:"Paraphrase this text in English: "+text}]})
       });
       const data = await res.json();
-      let out = data.choices?.[0]?.message?.content || "Error processing request. Please try again.";
-      document.getElementById("result").innerText = out;
-      count++;
+      document.getElementById("result").innerText = data.choices?.[0]?.message?.content || "Error.";
+      if(!unlimited) { count++; localStorage.setItem("paraCount", String(count)); document.getElementById("usedCount").innerText = count; }
+    }
+    function requestKey() {
+      const email = document.getElementById("paidEmail").value;
+      if(!email) return alert("Enter your email");
+      document.getElementById("keyResult").innerText = "Thanks! We will verify and send your key within 24 hours. DM @Alexis for instant activation.";
     }
   </script>
 </body>
