@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Free AI Paraphraser</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
+    body{max-width:800px;margin:40px auto;padding:0 20px;background:#f9f9f9}
+    .box{background:white;padding:24px;border-radius:12px;box-shadow:0 2px 10px #00000010}
+    textarea{width:100%;height:180px;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:8px}
+    button{background:#007bff;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer}
+    .result{margin-top:20px;padding:16px;background:#f1f1f1;border-radius:8px;min-height:100px}
+    .tg{margin-top:20px;text-align:center;color:#333}
+    .tg a{color:#007bff;font-weight:bold}
+    .limit{color:#666;font-size:14px;margin-bottom:10px}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Free AI Paraphraser | Rewrite Text</h2>
+    <p class="limit">Free daily uses, no login needed</p>
+    <textarea id="input" placeholder="Paste your text here..."></textarea>
+    <button onclick="rewrite()">Paraphrase</button>
+    <div class="result" id="result"></div>
+  </div>
+  <div class="tg">
+    Unlimited use & API Key → Telegram: <a href="https://t.me/Alexis" target="_blank">@Alexis</a>
+  </div>
+
+  <script>
+    let count = 0;
+    async function rewrite() {
+      if(count >= 3) {
+        document.getElementById("result").innerText = "Daily limit reached. DM Telegram for unlimited.";
+        return;
+      }
+      let text = document.getElementById("input").value;
+      if(!text) return alert("Enter text");
+      document.getElementById("result").innerText = "Processing...";
+
+      const res = await fetch("https://api.deepseek.com/v1/chat/completions", {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":"Bearer sk-a25622a11cf3443bb77e0092884630bc"
+        },
+        body:JSON.stringify({
+          model: "deepseek-chat",
+          messages: [{role:"user",content:"Paraphrase this text in English: "+text}]
+        })
+      });
+      const data = await res.json();
+      let out = data.choices?.[0]?.message?.content || "Error processing request. Please try again.";
+      document.getElementById("result").innerText = out;
+      count++;
+    }
+  </script>
+</body>
+</html>
