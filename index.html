@@ -1,3 +1,4 @@
+Enter file contents here
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +23,15 @@
     .api-section input{width:280px;padding:10px;border:1px solid #ccc;border-radius:6px;margin:8px}
     .api-section button{background:#28a745}
     .api-section button:hover{background:#1e7e34}
+    .nav{display:flex;gap:12px;justify-content:center;margin-bottom:20px}
+    .nav button{background:#6c757d;padding:8px 20px}
+    .nav button.active{background:#007bff}
+    .hidden{display:none}
+    .badge{background:#ffc107;color:#333;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:bold}
+
+
+
+
     .admin-section{display:none;margin-top:16px;padding:16px;background:#f0f0f0;border-radius:8px}
     .admin-section input{width:250px;padding:10px;border:1px solid #ccc;border-radius:6px;margin:4px}
     .admin-section table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
@@ -30,25 +40,23 @@
     .admin-section tr:nth-child(even){background:#f9f9f9}
     .admin-btn{background:#6c757d;padding:6px 14px;font-size:13px}
     .admin-link{color:#6c757d;font-size:12px;cursor:pointer;text-decoration:underline}
-    .nav{display:flex;gap:12px;justify-content:center;margin-bottom:20px}
-    .nav button{background:#6c757d;padding:8px 20px}
-    .nav button.active{background:#007bff}
-    .hidden{display:none}
-    .badge{background:#ffc107;color:#333;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:bold}
   </style>
 </head>
 <body>
   <div class="nav">
     <button onclick="showTab('tool')" id="tabTool" class="active">Paraphrase Tool</button>
-    <button onclick="showTab('pricing')" id="tabPricing">Pricing & Unlock</button>
+    <button onclick="showTab('pricing')" id="tabPricing">Pricing and Unlock</button>
   </div>
+
+
+
 
   <div id="tabToolContent">
     <div class="box">
       <h2>Free AI Paraphraser | Rewrite Text</h2>
       <p class="limit">
         Free: <span id="usedCount">0</span>/3 daily uses | 
-        <span class="badge">Unlimited: $5/mo</span>
+        <span class="badge">Paid: from $3</span>
       </p>
       <textarea id="input" placeholder="Paste your text here..."></textarea>
       <button onclick="rewrite()">Paraphrase</button>
@@ -59,134 +67,105 @@
     </div>
   </div>
 
+
   <div id="tabPricingContent" class="hidden">
     <div class="box">
-      <h2>Buy API Credits · Pay Per Use</h2>
+      <h2>Buy API Credits - Pay Per Use</h2>
       <p style="margin:12px 0;color:#555">Your saved API key. No monthly fees. Credits never expire.</p>
-      
       <div class="pay-section">
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0">
           <div style="background:#f0f8ff;border-radius:12px;padding:16px;min-width:160px;border:2px solid #007bff">
-            <h3 style="margin:0;color:#007bff">$3</h3>
-            <p style="font-size:24px;font-weight:bold;margin:8px 0">5,000</p>
-            <p style="color:#666;font-size:13px">credits</p>
+            <h3 style="margin:0;color:#007bff">$3</h3><p style="font-size:24px;font-weight:bold;margin:8px 0">5,000</p><p style="color:#666;font-size:13px">uses</p>
           </div>
           <div style="background:#fef9e7;border-radius:12px;padding:16px;min-width:160px;border:2px solid #ffc107">
-            <h3 style="margin:0;color:#e6a800">$5</h3>
-            <p style="font-size:24px;font-weight:bold;margin:8px 0">10,000</p>
-            <p style="color:#666;font-size:13px">credits</p>
+            <h3 style="margin:0;color:#e6a800">$5</h3><p style="font-size:24px;font-weight:bold;margin:8px 0">10,000</p><p style="color:#666;font-size:13px">uses</p>
           </div>
           <div style="background:#f0fff0;border-radius:12px;padding:16px;min-width:160px;border:2px solid #28a745">
-            <h3 style="margin:0;color:#28a745">$10</h3>
-            <p style="font-size:24px;font-weight:bold;margin:8px 0">25,000</p>
-            <p style="color:#666;font-size:13px">credits</p>
+            <h3 style="margin:0;color:#28a745">$10</h3><p style="font-size:24px;font-weight:bold;margin:8px 0">25,000</p><p style="color:#666;font-size:13px">uses</p>
           </div>
         </div>
-        
-        <h3>Pay with PayPal</h3>
-        <div style="background:#f8f9fa;padding:16px;border-radius:8px;margin:12px 0">
-          <p style="font-size:18px;font-weight:bold;color:#333">Send exact amount to:</p>
-          <p style="font-size:20px;font-weight:bold;color:#007bff">1640004571@qq.com</p>
+        <h3 style="margin-top:16px">Pay with USDT (TRC-20)</h3>
+        <div style="background:#f0f8ff;padding:16px;border-radius:8px;margin:12px 0">
+          <p style="font-size:16px;font-weight:bold;color:#333">Step 1: Select plan and enter email</p>
+          <input type="email" id="buyEmail" placeholder="Your email (to receive API Key)" style="width:300px;padding:12px;border:1px solid #007bff;border-radius:6px;font-size:15px;margin:8px">
+          <div style="margin:12px 0;display:flex;gap:10px;flex-wrap:wrap">
+            <div onclick="selectPlan('3','5000')" id="plan3" style="cursor:pointer;border:2px solid #ddd;border-radius:10px;padding:10px 18px;min-width:120px;text-align:center">$3 / 5k</div>
+            <div onclick="selectPlan('5','10000')" id="plan5" style="cursor:pointer;border:2px solid #ffc107;border-radius:10px;padding:10px 18px;min-width:120px;text-align:center">$5 / 10k</div>
+            <div onclick="selectPlan('10','25000')" id="plan10" style="cursor:pointer;border:2px solid #28a745;border-radius:10px;padding:10px 18px;min-width:120px;text-align:center">$10 / 25k</div>
+          </div>
+          <button onclick="showPayAddress()" style="margin-top:12px">Confirm Email and Show Payment Address</button>
         </div>
-        <a class="pay-btn" href="https://paypal.me/bw41640004571" target="_blank" style="color:white;text-decoration:none">Pay via PayPal.me</a>
-        <p style="color:#666;font-size:13px;margin-top:12px">2. After payment, DM @Alexis on Telegram with your receipt to get your API Key.</p>
+        <div id="payAddressSection" style="display:none;background:#fffbe6;padding:16px;border-radius:8px;margin:12px 0">
+          <p style="font-size:16px;font-weight:bold;color:#333">Step 2: Send USDT (TRC-20) to this address</p>
+          <p style="font-size:13px;color:#666">Send exactly <strong id="payAmountDisplay">$5</strong> USDT (TRC-20):</p>
+          <p id="payAddress" style="font-size:18px;font-weight:bold;color:#28a745;font-family:monospace;background:#fff;padding:12px;border:1px dashed #28a745;border-radius:6px;cursor:pointer" onclick="copyAddress()">TYtZx8vNiFSkPBXvFnyeG4kjsKN4bPB9t3</p>
+          <p style="font-size:12px;color:#888">Click to copy | Chain: TRC-20</p>
+          <div style="margin:12px 0">
+            <p style="font-size:16px;font-weight:bold;color:#333">Step 3: Confirm payment</p>
+            <button onclick="claimKey()" style="margin-top:8px;background:#28a745">I Sent USDT - Get My API Key</button>
+            <p id="claimMsg" style="margin-top:8px;font-size:14px"></p>
+          </div>
+        </div>
       </div>
-
+      <div class="api-section" style="background:#fff3cd">
+        <h3>Still want to pay via PayPal?</h3>
+        <p style="color:#555;font-size:14px">Send to 1640004571@qq.com, then DM <a href="https://t.me/Alexis" target="_blank">@Alexis</a> on Telegram.</p>
+      </div>
       <div class="api-section" id="unlockSection">
         <h3>Already paid? Enter Your API Key</h3>
-        <p style="color:#555;font-size:14px">Paste the API Key you received from @Alexis:</p>
         <input type="text" id="apiKeyInput" placeholder="Paste your API key (para_...)">
         <button onclick="unlockWithKey()">Unlock</button>
         <p id="unlockMsg" style="margin-top:8px;font-size:14px"></p>
       </div>
       <div class="api-section" id="creditsSection" style="display:none">
-        <h3>You're Unlocked</h3>
+        <h3>You are Unlocked</h3>
         <p id="creditsInfo" style="font-size:16px;font-weight:bold;color:#28a745"></p>
         <button onclick="clearKey()" style="background:#dc3545;margin-top:8px">Clear Key</button>
       </div>
-      <div class="api-section" style="background:#fff3cd">
-        <h3>Haven't paid yet?</h3>
-        <p style="color:#555;font-size:14px">Send payment via PayPal to <strong>1640004571@qq.com</strong>, then DM your receipt to <a href="https://t.me/Alexis" target="_blank">@Alexis</a> on Telegram to get your API Key.</p>
-        <input type="email" id="paidEmail" placeholder="Enter the email you paid with">
-        <button onclick="requestKey()" style="background:#ffc107;color:#333">Notify Me</button>
-        <p id="keyResult" style="margin-top:8px;font-size:14px"></p>
-      </div>
-    </div>
-    <div class="tg">
-      Questions? DM on Telegram: <a href="https://t.me/Alexis" target="_blank">@Alexis</a>
     </div>
   </div>
-
-  <div id="adminPanel" class="admin-section">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 style="margin:0">Admin Dashboard</h3>
-      <span class="admin-link" onclick="document.getElementById('adminPanel').style.display='none';document.getElementById('adminBtn').style.display='block'">Close</span>
-    </div>
-    
-    <h4 style="margin:12px 0 4px">Register New User</h4>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <input type="email" id="regEmail" placeholder="User email">
-      <select id="regCredits" style="padding:10px;border:1px solid #ccc;border-radius:6px">
-        <option value="5000">$3 - 5,000 credits</option>
-        <option value="10000" selected>$5 - 10,000 credits</option>
-        <option value="25000">$10 - 25,000 credits</option>
-      </select>
-      <button class="admin-btn" onclick="adminRegister()">Register</button>
-    </div>
-    <p id="regResult" style="font-size:13px;margin:4px 0"></p>
-
-    <h4 style="margin:12px 0 4px">Add More Credits</h4>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <input type="email" id="topupEmail" placeholder="User email">
-      <input type="number" id="topupAmount" placeholder="Credits to add" value="5000" style="width:120px">
-      <button class="admin-btn" onclick="adminTopup()">Add Credits</button>
-    </div>
-    <p id="topupResult" style="font-size:13px;margin:4px 0"></p>
-
-    <h4 style="margin:12px 0 4px">Usage Overview</h4>
-    <div id="adminStats" style="font-size:13px">Loading...</div>
-    <button class="admin-btn" onclick="adminRefresh()" style="margin-top:8px">Refresh</button>
-  </div>
-  <p id="adminBtn" style="text-align:center;margin-top:20px;display:none">
-    <span class="admin-link" onclick="document.getElementById('adminPanel').style.display='block';this.style.display='none'">Admin</span>
-  </p>
-
   <script>
     let count = parseInt(localStorage.getItem("paraCount") || "0");
     let resetDate = localStorage.getItem("paraDate") || "";
     const today = new Date().toDateString();
-
-    if(resetDate !== today) {
-      count = 0;
-      localStorage.setItem("paraCount", "0");
-      localStorage.setItem("paraDate", today);
-    }
+    if(resetDate !== today) { count = 0; localStorage.setItem("paraCount", "0"); localStorage.setItem("paraDate", today); }
     document.getElementById("usedCount").innerText = count;
 
-    let myApiKey = localStorage.getItem("myApiKey") || "";
-    let myCredits = parseInt(localStorage.getItem("myCredits") || "0");
-    let myUsed = parseInt(localStorage.getItem("myUsed") || "0");
+    let selectedPlan = 5;
+    let selectedCredits = 10000;
 
-    function updateKeyStatus() {
-      if (myApiKey && myCredits > 0) {
-        const remaining = myCredits - myUsed;
-        document.getElementById("unlockSection").style.display = "none";
-        document.getElementById("creditsSection").style.display = "block";
-        document.getElementById("creditsInfo").innerText = remaining + "/" + myCredits + " credits left";
-      } else if (myApiKey) {
-        document.getElementById("unlockSection").style.display = "none";
-        document.getElementById("creditsSection").style.display = "block";
-        document.getElementById("creditsInfo").innerText = "API Key saved (credit info will appear after first use)";
-      }
+    function selectPlan(usd, credits) {
+      selectedPlan = usd; selectedCredits = credits;
+      document.querySelectorAll('[id^="plan"]').forEach(el => el.style.borderColor = '#ddd');
+      const el = document.getElementById('plan' + usd);
+      if (el) el.style.borderColor = '#007bff';
+      document.getElementById('payAddressSection').style.display = 'none';
     }
-    updateKeyStatus();
+
+    function showPayAddress() {
+      const email = document.getElementById('buyEmail').value.trim();
+      if (!email || !email.includes('@')) return alert('Please enter a valid email address');
+      document.getElementById('payAmountDisplay').innerText = "$" + selectedPlan;
+      document.getElementById('payAddressSection').style.display = 'block';
+    }
+
+    function copyAddress() {
+      navigator.clipboard.writeText('TYtZx8vNiFSkPBXvFnyeG4kjsKN4bPB9t3').then(() => alert('Address copied!')).catch(() => alert('Manual copy: TYtZx8vNiFSkPBXvFnyeG4kjsKN4bPB9t3'));
+    }
+
+    async function claimKey() {
+      const email = document.getElementById('buyEmail').value.trim();
+      if (!email) return alert('Enter your email first');
+      document.getElementById('claimMsg').innerHTML = 'Checking payment status...';
+      const res = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'claimKey', email:email, plan:'usdt_' + selectedPlan}) });
+      const data = await res.json();
+      if (data.apiKey) document.getElementById('claimMsg').innerHTML = 'API Key sent to ' + email + '! Check your inbox.';
+      else if (data.status === 'pending') document.getElementById('claimMsg').innerHTML = 'USDT not detected yet. Please wait a few minutes or DM @Alexis.';
+      else document.getElementById('claimMsg').innerHTML = data.error || 'Error. DM @Alexis.';
+    }
 
     if (window.location.search.includes('admin=bw4admin2026')) {
-      setTimeout(function() {
-        document.getElementById('adminPanel').style.display = 'block';
-        document.getElementById('adminBtn').style.display = 'none';
-        adminRefresh();
-      }, 500);
+      setTimeout(function() { document.getElementById('adminPanel').style.display = 'block'; document.getElementById('adminBtn').style.display = 'none'; adminRefresh(); }, 500);
     }
 
     async function adminRegister() {
@@ -194,29 +173,27 @@
       const credits = parseInt(document.getElementById('regCredits').value);
       if (!email) return alert('Enter email');
       document.getElementById('regResult').innerText = 'Registering...';
-      const res = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'register', admin:'bw4admin2026', email, credits}) });
+      const res = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'register', admin:'bw4admin2026', email:email, credits:credits}) });
       const data = await res.json();
-      document.getElementById('regResult').innerHTML = data.apiKey ? '<span style="color:#28a745">Key: <code>' + data.apiKey + '</code></span>' : '<span style="color:#dc3545">' + (data.error || 'Error') + '</span>';
+      document.getElementById('regResult').innerHTML = data.apiKey ? 'Key: ' + data.apiKey : data.error || 'Error';
     }
 
     async function adminTopup() {
       const email = document.getElementById('topupEmail').value;
       const credits = parseInt(document.getElementById('topupAmount').value);
       if (!email) return alert('Enter email');
-      document.getElementById('topupResult').innerText = 'Adding credits...';
-      const res = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'addCredits', admin:'bw4admin2026', email, credits}) });
+      const res = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'addCredits', admin:'bw4admin2026', email:email, credits:credits}) });
       const data = await res.json();
-      document.getElementById('topupResult').innerHTML = data.totalCredits ? '<span style="color:#28a745">Total: ' + data.totalCredits + ', Used: ' + data.used + '</span>' : '<span style="color:#dc3545">' + (data.error || 'Error') + '</span>';
+      document.getElementById('topupResult').innerHTML = data.totalCredits ? 'Total: ' + data.totalCredits + ', Used: ' + data.used : data.error || 'Error';
     }
 
     async function adminRefresh() {
-      document.getElementById('adminStats').innerText = 'Loading...';
       const res = await fetch('/api/proxy?admin=bw4admin2026');
       const data = await res.json();
-      let h = '<p><strong>Total API calls:</strong> ' + (data.totalRequests || 0) + ' | <strong>Paid users:</strong> ' + (data.paidUsers ? data.paidUsers.length : 0) + '</p>';
+      let h = '<p>Total API calls: ' + (data.totalRequests || 0) + ' | Paid users: ' + (data.paidUsers ? data.paidUsers.length : 0) + '</p>';
       if (data.paidUsers && data.paidUsers.length > 0) {
         h += '<table><tr><th>Email</th><th>Key</th><th>Used</th><th>Remaining</th></tr>';
-        data.paidUsers.forEach(u => { h += '<tr><td>' + u.email + '</td><td><code>' + u.apiKey + '</code></td><td>' + u.used + '</td><td>' + u.remaining + '</td></tr>'; });
+        data.paidUsers.forEach(u => { h += '<tr><td>' + u.email + '</td><td>' + u.apiKey + '</td><td>' + u.used + '</td><td>' + u.remaining + '</td></tr>'; });
         h += '</table>';
       }
       document.getElementById('adminStats').innerHTML = h;
@@ -227,63 +204,51 @@
       document.getElementById("tabPricingContent").classList.add("hidden");
       document.getElementById("tabTool").classList.remove("active");
       document.getElementById("tabPricing").classList.remove("active");
-      if(tab === "tool") {
-        document.getElementById("tabToolContent").classList.remove("hidden");
-        document.getElementById("tabTool").classList.add("active");
-      } else {
-        document.getElementById("tabPricingContent").classList.remove("hidden");
-        document.getElementById("tabPricing").classList.add("active");
-      }
+      if(tab === "tool") { document.getElementById("tabToolContent").classList.remove("hidden"); document.getElementById("tabTool").classList.add("active"); }
+      else { document.getElementById("tabPricingContent").classList.remove("hidden"); document.getElementById("tabPricing").classList.add("active"); }
     }
 
     async function rewrite() {
       let text = document.getElementById("input").value;
       if(!text) return alert("Enter text");
-      const unlimited = localStorage.getItem("unlimited") === "true";
-      if(!unlimited && count >= 3) {
-        document.getElementById("result").innerHTML = 'Daily limit reached. <a href="#" onclick="showTab('pricing');return false">Unlock unlimited access</a>';
-        return;
-      }
+      if(count >= 3) { document.getElementById("result").innerHTML = 'Daily limit reached.'; return; }
       document.getElementById("result").innerText = "Processing...";
-      const body = { text };
-      if (myApiKey) body.apiKey = myApiKey;
-      const res = await fetch("/api/proxy", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body) });
+      const res = await fetch("/api/proxy", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({text}) });
       const data = await res.json();
-      if (res.status === 402) { document.getElementById("result").innerHTML = data.error; return; }
-      if (data.unlimited && myApiKey) { myUsed = data.used || (myUsed + 1); localStorage.setItem("myUsed", String(myUsed)); updateKeyStatus(); }
-      let out = data.result || "Error processing request. Please try again.";
-      document.getElementById("result").innerText = out;
-      if(!unlimited) { count++; localStorage.setItem("paraCount", String(count)); document.getElementById("usedCount").innerText = count; }
-    }
-
-    function requestKey() {
-      const email = document.getElementById("paidEmail").value;
-      if(!email) return alert("Enter your email");
-      document.getElementById("keyResult").innerText = "DM @Alexis on Telegram with your payment receipt to get your API Key instantly.";
+      document.getElementById("result").innerText = data.result || "Error.";
+      count++; localStorage.setItem("paraCount", String(count)); document.getElementById("usedCount").innerText = count;
     }
 
     function unlockWithKey() {
       const key = document.getElementById("apiKeyInput").value.trim();
       if (!key) return alert("Enter your API Key");
       localStorage.setItem("myApiKey", key);
-      myApiKey = key;
-      document.getElementById("unlockMsg").innerText = "API Key saved! You now have unlimited access.";
-      document.getElementById("unlockMsg").style.color = "#28a745";
-      updateKeyStatus();
+      alert("API Key saved!");
     }
 
     function clearKey() {
       localStorage.removeItem("myApiKey");
-      localStorage.removeItem("myEmail");
-      localStorage.removeItem("myCredits");
-      localStorage.removeItem("myUsed");
-      myApiKey = "";
-      myCredits = 0;
-      myUsed = 0;
-      document.getElementById("unlockSection").style.display = "block";
-      document.getElementById("creditsSection").style.display = "none";
-      document.getElementById("unlockMsg").innerText = "";
+      alert("Key cleared");
     }
   </script>
+
+  <div id="adminPanel" class="admin-section" style="display:none">
+    <h3 style="margin:0">Admin Dashboard</h3>
+    <h4>Register New User</h4>
+    <input type="email" id="regEmail" placeholder="User email">
+    <select id="regCredits" style="padding:10px;border:1px solid #ccc;border-radius:6px">
+      <option value="5000">$3 - 5k</option><option value="10000" selected>$5 - 10k</option><option value="25000">$10 - 25k</option>
+    </select>
+    <button class="admin-btn" onclick="adminRegister()">Register</button>
+    <p id="regResult" style="font-size:13px"></p>
+    <h4>Add Credits</h4>
+    <input type="email" id="topupEmail" placeholder="User email">
+    <input type="number" id="topupAmount" placeholder="Credits" value="5000" style="width:120px">
+    <button onclick="adminTopup()">Add</button>
+    <p id="topupResult" style="font-size:13px"></p>
+    <h4>Usage</h4>
+    <div id="adminStats">Loading...</div>
+    <button onclick="adminRefresh()">Refresh</button>
+  </div>
 </body>
 </html>
