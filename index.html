@@ -37,7 +37,7 @@
   <div id="tabToolContent">
     <div class="box">
       <h2>Free AI Paraphraser | Rewrite Text</h2>
-      <p class="limit">Free: <span id="usedCount">0</span>/3 daily uses | <span class="badge">Unlimited: $5/mo</span></p>
+      <p class="limit">Free: <span id="usedCount">0</span>/3 daily uses | <span class="badge">$5/10k uses</span></p>
       <textarea id="input" placeholder="Paste your text here..."></textarea>
       <button onclick="rewrite()">Paraphrase</button>
       <div class="result" id="result"></div>
@@ -46,27 +46,39 @@
   </div>
   <div id="tabPricingContent" class="hidden">
     <div class="box">
-      <h2>Unlock Unlimited Access</h2>
-      <p style="margin:12px 0;color:#555">Get unlimited paraphrasing + your own API key for just <strong>$5/month</strong>.</p>
+      <h2>Buy API Credits · Pay Per Use</h2>
+      <p style="margin:12px 0;color:#555">Credits never expire. No monthly fees.</p>
       <div class="pay-section">
-        <h3>What you get:</h3>
-        <p style="margin:6px 0">Unlimited use - no daily limit</p>
-        <p style="margin:6px 0">Priority processing speed</p>
-        <p style="margin:6px 0">Access to all future features</p>
-        <h3 style="margin-top:20px">Pay with PayPal</h3>
-        <p style="color:#666;font-size:14px;margin:8px 0">Send $5 to the PayPal account below, then enter your email to receive your API key.</p>
-        <div style="background:#f8f9fa;padding:16px;border-radius:8px;margin:12px 0">
-          <p style="font-size:18px;font-weight:bold;color:#333">1640004571@qq.com</p>
-          <p style="color:#666;font-size:13px">PayPal</p>
+        <h3>Choose your plan:</h3>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0">
+          <div style="background:#f0f8ff;border-radius:12px;padding:16px;min-width:150px;border:2px solid #007bff">
+            <h3 style="margin:0;color:#007bff">$3</h3>
+            <p style="font-size:22px;font-weight:bold;margin:8px 0">5,000</p>
+            <p style="color:#666;font-size:13px">uses</p>
+          </div>
+          <div style="background:#fef9e7;border-radius:12px;padding:16px;min-width:150px;border:2px solid #ffc107">
+            <h3 style="margin:0;color:#e6a800">$5</h3>
+            <p style="font-size:22px;font-weight:bold;margin:8px 0">10,000</p>
+            <p style="color:#666;font-size:13px">uses</p>
+          </div>
+          <div style="background:#f0fff0;border-radius:12px;padding:16px;min-width:150px;border:2px solid #28a745">
+            <h3 style="margin:0;color:#28a745">$10</h3>
+            <p style="font-size:22px;font-weight:bold;margin:8px 0">25,000</p>
+            <p style="color:#666;font-size:13px">uses</p>
+          </div>
         </div>
-        <a class="pay-btn" href="https://paypal.me/bw41640004571" target="_blank" style="color:white;text-decoration:none">Pay Now with PayPal</a>
-        <p style="color:#888;font-size:13px;margin-top:6px">Or send to PayPal.me/bw41640004571</p>
+        <h3>Pay with PayPal</h3>
+        <div style="background:#f8f9fa;padding:16px;border-radius:8px;margin:12px 0">
+          <p style="font-size:18px;font-weight:bold;color:#333">Send exact amount to:</p>
+          <p style="font-size:20px;font-weight:bold;color:#007bff">1640004571@qq.com</p>
+        </div>
+        <a class="pay-btn" href="https://paypal.me/bw41640004571" target="_blank" style="color:white;text-decoration:none">Pay via PayPal.me</a>
       </div>
       <div class="api-section">
-        <h3>Already paid? Get your API Key</h3>
-        <p style="color:#555;font-size:14px">Enter the email you paid with and we will verify and send your key.</p>
+        <h3>Already paid? Get Credits</h3>
+        <p style="color:#555;font-size:14px">Enter the email you paid with.</p>
         <input type="email" id="paidEmail" placeholder="Enter your email">
-        <button onclick="requestKey()">Get My API Key</button>
+        <button onclick="requestKey()">Get My Credits</button>
         <p id="keyResult" style="margin-top:8px;font-size:14px"></p>
       </div>
     </div>
@@ -100,7 +112,7 @@
       if(!text) return alert("Enter text");
       const unlimited = localStorage.getItem("unlimited") === "true";
       if(!unlimited && count >= 3) {
-        document.getElementById("result").innerHTML = "Daily limit reached. Click Pricing tab to unlock unlimited.";
+        document.getElementById("result").innerHTML = "Daily limit reached. Click Pricing tab to buy credits.";
         return;
       }
       document.getElementById("result").innerText = "Processing...";
@@ -117,7 +129,7 @@
     function requestKey() {
       const email = document.getElementById("paidEmail").value;
       if(!email) return alert("Enter your email");
-      document.getElementById("keyResult").innerText = "Thanks! We will verify and send your key within 24 hours. DM @Alexis for instant activation.";
+      document.getElementById("keyResult").innerText = "Thanks! Your payment will be verified within 24 hours. DM @Alexis on Telegram for instant activation.";
     }
   </script>
 </body>
