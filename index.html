@@ -104,13 +104,14 @@
         return;
       }
       document.getElementById("result").innerText = "Processing...";
-      const res = await fetch("https://api.deepseek.com/v1/chat/completions", {
+      const res = await fetch("/api/proxy", {
         method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":"Bearer sk-a25622a11cf3443bb77e0092884630bc"},
-        body:JSON.stringify({model:"deepseek-chat",messages:[{role:"user",content:"Paraphrase this text in English: "+text}]})
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({text})
       });
       const data = await res.json();
-      document.getElementById("result").innerText = data.choices?.[0]?.message?.content || "Error.";
+      let out = data.result || "Error.";
+      document.getElementById("result").innerText = out;
       if(!unlimited) { count++; localStorage.setItem("paraCount", String(count)); document.getElementById("usedCount").innerText = count; }
     }
     function requestKey() {
